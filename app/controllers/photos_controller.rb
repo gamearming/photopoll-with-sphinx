@@ -58,18 +58,9 @@ class PhotosController < ApplicationController
   
   def search
     if params[:query].blank? || params[:query].to_s.strip.blank?
-      @photos = Photo.all
+      @photos = Photo.search
     else
-      query = '%' + params[:query].to_s.downcase + '%'
-      conditions = ["LOWER(name) LIKE ? ", query]
-      if params[:include_comments].to_s == 'on'
-        conditions = [conditions.first + " OR LOWER(ratings.comment) LIKE ?", conditions.last, query ]
-      end
-      if params[:limit_to_recents].to_s == 'on'
-        conditions = ["( " + conditions.shift + " ) AND photos.created_at >= ?", *(conditions << 1.day.ago) ]
-      end
-
-      @photos = Photo.find(:all, :joins => :ratings, :conditions => conditions).uniq
+      Photo.search :conditions => {:name => params[:query]}
     end
   end
 end
