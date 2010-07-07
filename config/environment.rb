@@ -18,7 +18,8 @@ end
 
 require 'riddle/0.9.9'
 
-if Rails.env.production? and not ActiveSupport::JSON.decode(File.read('/var/lib/scalarium/cluster_state.json'))['instance']['roles'].include?('sphinx')
+cluster_state = '/var/lib/scalarium/cluster_state.json'
+if Rails.env.production? and File.exist?(cluster_state) and not ActiveSupport::JSON.decode(File.read(cluster_state))['instance']['roles'].include?('sphinx')
   ThinkingSphinx.remote_sphinx = true
 end
 
