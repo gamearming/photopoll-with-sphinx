@@ -17,5 +17,8 @@ Rails::Initializer.run do |config|
 end
 
 require 'riddle/0.9.9'
-ThinkingSphinx.remote_sphinx = true
+
+if Rails.env.production? and not ActiveSupport::JSON.decode(File.read('/var/lib/scalarium/cluster_state.json'))['instance']['roles'].include?('sphinx')
+  ThinkingSphinx.remote_sphinx = true
+end
 
