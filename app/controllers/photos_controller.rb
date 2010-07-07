@@ -60,7 +60,7 @@ class PhotosController < ApplicationController
     if params[:query].blank? || params[:query].to_s.strip.blank?
       @photos = Photo.search
     else
-      Photo.search :conditions => {:name => params[:query]}
+      @photos = Photo.search :conditions => {:name => params[:query]}
     end
   end
 end
